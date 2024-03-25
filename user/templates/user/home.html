@@ -1,0 +1,38 @@
+<!-- Home/home.html -->
+{% extends 'user/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated and false %}
+
+  <h2>Menu</h2>
+  <ul>
+    {% for menu_item in menu_items %}
+      <li>
+        <strong>{{ menu_item.name }}</strong><br>
+        Description: {{ menu_item.description }}<br>
+        Price: ${{ menu_item.price }}
+        <!-- <form method="post" action="{% url 'add_to_cart' %}">
+          {% csrf_token %} -->
+          <input type="hidden" name="item_id" value="{{ menu_item.id }}">
+          <label for="quantity">Quantity:</label>
+          <input type="number" name="quantity" value="1" min="1">
+          <!-- <button type="submit">Add to Cart</button> -->
+          <button>Add to Cart</button>
+        <!-- </form> -->
+      </li>
+    {% endfor %}
+  </ul>
+  <a href="">View Cart</a>
+  <!-- <form method="post" action="{% url 'place_order' %}">
+    {% csrf_token %} -->
+    <!-- <button type="submit">Place Order</button>
+  </form> -->
+  <button>Place Order</button>
+  {% else %}
+        <h2>Welcome to My Website!</h2>
+        <p>Sign up to access exclusive features.</p>
+        <a href="{% url 'signup' %}" class="btn btn-primary">Sign Up</a>
+    {% endif %}
+{% endblock %}

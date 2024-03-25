@@ -1,0 +1,99 @@
+<!-- Home/home.html -->
+
+{% extends 'user/base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <section class="greeting mt-28 padd lg:px-20 ">
+      <h1 style="color: #2d3142;" class="text-3xl playfair-display  lg:text-5xl font-semibold">Welcome!</h1>
+
+      <p style="color: #4f5d75;" class="capitalize poppins text-xs   lg:text-xl ">dorm delivery delisios and sweet food </p>
+      <p style="color: #4f5d75;" class=" mt-3 mb-2 capitalize poppins text-md font-medium   lg:text-xl ">Contact Us +251975086006 </p>
+
+  </section>
+  
+  <form method="get" class="padd max-w-screen-2xl">
+  <div id="search" class="w-full  h-12    mt-3 relative max-w-screen-sm border-2 rounded-full  overflow-hidden">
+      <input style="border: 1px solid #bfc0c0;" type="search" name="search_query" id="sr" class="w-full  h-full shadow-md  bg-slate-100  px-20  rounded-full text-sm  " placeholder="search" value="{{ request.GET.search_query }}">
+      <button  type="submit"  ><img src="{% static 'user/images/search-svgrepo-com.svg'%}" alt="search" style="background-color: #ef8354;" class="w-14  absolute z-10  h-full top-0 left-0   px-4 "></button>
+  </div>
+  </form>
+  
+  <div class="mt-5 padd text-sm">
+      <ul  class="scrollable-list capitalize relative z-10 flex  items-center" id="horizontalList">
+        <form method="get" class="list-item flex justify-center items-center">
+          <input name="search_query" class=" hidden  " value="">
+          <button  class="text-lg font-bold flex justify-center items-center "  type="submit">#All</button>
+      </form>
+        <form method="get" class="list-item">
+            <input name="search_query" class=" hidden  " value="Food">
+            <button    type="submit">Food</button>
+        </form>
+          <form method="get" class="list-item">
+            <input name="search_query" class=" hidden  " value="Clothes">
+            <button    type="submit">Clothes</button>
+        </form>
+        <form method="get" class="list-item">
+            <input name="search_query" class=" hidden  " value="Bags">
+            <button    type="submit">Bags</button>
+        </form>
+          <form method="get" class="list-item">
+            <input name="search_query" class=" hidden  " value="Fruits">
+            <button    type="submit">Fruits</button>
+        </form>
+          
+          <form method="get" class="list-item">
+            <input type="search" name="search_query" id="sr" class="w-full  h-12 shadow-md  bg-slate-100 rounded-full px-6  hidden  " placeholder="search" value="Drink">
+            <button    type="submit">Drink</button>
+        </form>
+        <form method="get" class="list-item">
+            <input name="search_query" class=" hidden  " value="Remedan">
+            <button    type="submit">Remedan Items</button>
+        </form>
+
+      </ul>
+  </div>
+  
+  <div class="scrollable-container padd">
+    <div class="grid-container pb-32 ">
+        {% if menu_items %}
+            {% for item in menu_items %}
+                <div style="background-color: #ffffff;" class="shadow-lg pb-3 rounded-lg h-fit text-sm {% if not item.is_available %} grayscale {% endif %}">
+                    {% if item.item_picture %}
+                        <div style="background-image: url('{{ item.item_picture.url }}');" class="bg-center bg-cover w-full h-3/5 item-h   rounded-t-lg"></div>
+                    {% else %}
+                        <!-- Display default image or placeholder image if item_picture is missing -->
+                        <!-- <div style="background-image: url('{% static 'user/images/' %}');" class="bg-center bg-cover w-full h-3/5 rounded-t-lg"></div> -->
+                    {% endif %}
+                    <div class="h-2/5 flex flex-col justify-around ">
+                        <div class="flex justify-between item center p-1 pt-3  ">
+                            <div>
+                                <h3 class="font-bold text-sm {% if not item.is_available %} text-gray-500 {% endif %} ">{{ item.name }}</h3>
+                                <p class="text-xs {% if not item.is_available %} text-gray-500 {% endif %}">{{ item.description }}</p>
+                            </div>
+                            <p class="text-xs {% if not item.is_available %} text-gray-500 {% endif %}">{{ item.price }} <span>ETB</span></p>
+                        </div>
+                        <form method="post" action="{% url 'order:add_to_cart' item.id %}" class="flex justify-between item-center  h-10 px-2 {% if not item.is_available %} disabled {% endif %}">
+                            {% csrf_token %}
+                            {% if  item.is_available %}
+                            <div>
+                                <!-- <label for="quantity">Quantity:</label> -->
+                                <input style="background-color: #edf2f4;" type="number" name="quantity" value="1" min="1" class=" pl-2 w-1/2 h-7 mt-1 bg-slate-200 shadow-md">
+                            </div>
+                            <button type="submit"  ><img src="{% static 'user/images/add-circle-svgrepo-com.svg'%}" alt="" class="w-32 h-32  relative -top-12"></button>
+                            {% else %}
+                            <p class="capitalize text-sm mt-2 pl-2 font-bold text-gray-400 flex justify-center gap-2 items-center"><img src="{% static 'user/images/banned.png' %}" alt="" class="w-5 h-5">we have finshed</p>
+                            {% endif %}
+
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No items found for the search query.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

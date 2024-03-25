@@ -1,0 +1,133 @@
+<!-- order/templates/order/view_cart.html -->
+
+{% extends 'user/base.html' %}
+{% load static %}
+{% block content %}
+<div class="h-screen overflow-x-hidden padd flex justify-start items-center flex-col">
+  <div class="flex justify-start items-center flex-col">
+      <h1 class="text-4xl font-semibold mb-3 mx-auto font-serif mt-24 w-screen text-center playfair-display">My Cart</h1>
+  </div>
+  <div style="height: 30vh; background: #ffffff;" class="w-full bg-slate-100 overflow-y-auto rounded-lg flex flex-col gap-4 px-6 p-2">
+      <!-- Cart items -->
+      {% if cart_items %}
+      {% for cart_item in cart_items %}
+      <div style="background-color: #edf2f4; border: 1px solid #bfc0c0;" class="w-full rounded-lg items-center flex bg-slate-200 shadow-md border-2">
+          {% if cart_item.item.item_picture %}
+          <div style="background-image: url('{{ cart_item.item.item_picture.url }}');" class="w-24 h-20 bg-center bg-cover rounded-md"></div>
+          {% else %}
+          <div style="background-image: url({% static 'user/images/artem-beliaikin-jlWoIsNTKjA-unsplash.jpg' %});" class="w-24 h-20 bg-center bg-cover rounded-md"></div>
+          {% endif %}
+          <div class="flex flex-col ml-3 text-sm gap-1">
+              <h2 class="capitalize">{{ cart_item.item.name }}</h2>
+              <p>{{ cart_item.item.description }}</p>
+              <p>{{ cart_item.item.price }} ETB * <span class="text-red-400 font-bold">{{ cart_item.quantity }}</span></p>
+          </div>
+          <form style="background-color: #e5383b;" method="post" class="ml-auto mr-3 rounded-lg text-white" action="{% url 'order:delete_item' cart_item.id %}">
+              {% csrf_token %}
+              <button class="py-4 px-5 rounded-lg text-white"><img src="{% static 'user/images/trash-svgrepo-com.svg' %}" class="w-5 h-5" alt=""></button>
+          </form>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p>Your cart is empty.</p>
+      {% endif %}
+  </div>
+  {% if error %}
+            <p class="w-full my-2 text-md font-bold text-red-600">{{ error }}</p>
+            {% endif %}
+  <div class="flex flex-col h-1/4 mt-5 w-full justify-start items-start gap-5 px-6">
+      <div class="flex justify-between w-full">
+          <h1 class="font-sans">SubTotal</h1>
+          <span>{{ total_price }} ETB</span>
+      </div>
+      <form method="post" action="{% url 'order:place_order' %}" class="overflow-visible flex justify-center items-center flex-col" id="order_form">
+          {% csrf_token %}
+          <div class="flex w-full justify-between items-center">
+              <label for="dorm_number">Dorm Number:</label>
+              <input style="background-color: #fff;" type="number" id="dorm_number" name="dorm_number" required class="bg-slate-100 w-1/2 h-10 text-black px-3 border-stone-600 border-b rounded-t-lg">
+          </div>
+
+
+          <div class="flex justify-start items-center w-full my-5">
+            <label for="payment_method">Select Pay Option:</label>
+            <select style="background-color: #fff;"   id="payment_method" name="payment_method" required class="bg-slate-100 w-1/2 h-10 text-black px-3 border-stone-600 border-b rounded-t-lg">
+                <option value="">-------</option>
+                {% for method, label in payment_methods %}
+                <option value="{{ method }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="instructions" class="flex justify-start items-center w-full my-2">
+         
+            <div id="CBEInstruction" class="instruction hidden">
+              <span>Send {{ total_price }} ETB to the account</span>
+                <input style="background-color: #fff;"  type="text" class="bg-slate-100 w-1/2 h-10 text-black px-3 border-stone-600 border-b rounded-t-lg" value="1000472674963" readonly>
+                <button type="button" style="background: #ef8354; color: #fff;" class="copy-btn px-3 py-2 rounded-md" onclick="copyToClipboard(this, 'CBE')">Copy</button>
+                <div class="copied-message hidden w-full bg-green-300 copy h-0 ">Copied</div> <!-- Added copied message -->
+                <div class=" w-full my-3 text-md  copy h-0 ">Name : Natnael Eskinder</div>
+            </div>
+        </div>
+        <span class="w-full my-2">Send us the trasaction Number to varify </span>
+      <div class="my-5">
+              <label for="transaction_no">Transaction No: <span class="text-xs text-red-600">your order is unaccepted if the traction number is <span class="font-bold uppercase"> incorrect</span></span></label>
+              <input style="background-color: #fff;"  type="text" name="transaction_no" id="transaction_no" class="py-2 p bg-slate-100 w-full h-10 text-black px-3 border-stone-600 border-b rounded-t-lg">
+          </div>
+          <div >
+              <label for="suggestion_box">Suggestions/Comments:</label>
+              <textarea style="background-color: #fff;"  class="pt-2 bg-slate-100 w-full h-10 text-black px-3 border-stone-600 border-b rounded-t-lg" id="suggestion_box" name="suggestion_box" rows="4" cols="50"></textarea>
+          </div>
+          <button style="background: #ef8354; color: #fff;" class="text-black mt-5 mb-32 w-44 font-bold py-3 bg-green-400 rounded-lg" type="submit">Pay Now</button>
+      </form>
+  </div>
+</div>
+<script>
+document.getElementById('order_form').addEventListener('submit', function(event) {
+      // Check if cart is empty
+      if ("{{ cart_items|length }}" == "0") {
+          // Prevent form submission
+          event.preventDefault();
+          alert("Your cart is empty. Please add items before placing an order.");
+      }
+  });
+   // Function to copy content of the input field to clipboard
+   function copyToClipboard(button, paymentMethod) {
+    var inputField = button.previousElementSibling;
+    inputField.select();
+    document.execCommand("copy");
+
+    // Show copied message
+    var copiedMessage = button.nextElementSibling;
+    copiedMessage.classList.remove("hidden");
+    copiedMessage.classList.remove("h-0");
+    copiedMessage.classList.add("h-10");
+    // Hide copied message after 5 seconds
+    setTimeout(function() {
+        copiedMessage.classList.add("hidden");
+        copiedMessage.classList.remove("h-10");
+        copiedMessage.classList.add("h-0");
+    }, 10000);
+
+    // Prevent form submission
+    event.preventDefault();
+}
+
+    // Function to toggle visibility of instructions based on selected payment method
+    document.getElementById("payment_method").addEventListener("change", function() {
+        var selectedMethod = this.value;
+        var instructions = document.querySelectorAll(".instruction");
+
+        // Hide all instructions
+        instructions.forEach(function(instruction) {
+            instruction.classList.add("hidden");
+        });
+
+        // Show instruction based on selected method
+        var selectedInstruction = document.getElementById(selectedMethod + "Instruction");
+        if (selectedInstruction) {
+            selectedInstruction.classList.remove("hidden");
+        }
+    });
+  
+</script>
+{% endblock %}
+

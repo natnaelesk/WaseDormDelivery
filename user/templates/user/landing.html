@@ -1,0 +1,8 @@
+<!-- user/templates/user/landing.html -->
+{% extends 'user/base.html' %}
+
+{% block content %}
+  <h2>Welcome to My Website!</h2>
+  <p>Sign up to access exclusive features.</p>
+  <a href="{% url 'signup' %}" class="btn btn-primary">Sign Up</a>
+{% endblock %}

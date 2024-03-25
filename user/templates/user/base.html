@@ -1,0 +1,187 @@
+{% load static %}
+<!-- Home/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Ethiopic:wght@100..900&family=Playfair+Display:wght@400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Add this to your head section -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <link  href="{% static 'user/output.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'user/style.css' %}">
+    {% block head %}{% endblock %}
+</head>
+<body style="background-color: #edf2f4;" class=" overflow-x-hidden ">
+    <!-- <section id="pre" class=" z-50 absolute top-0 preload w-screen text-white h-screen flex flex-col justify-center items-center " >
+         <h1 class="font-serif text-7xl">Wase </h1> 
+         <h2 class="font-thin font-mono text-2xl">Dorm Delivery</h2>
+         <div class="loader"><span></span><span></span><span></span></div>
+    </section> -->
+    <nav style="background-color: #edf2f4;"   class="padd   shadow-lg z-30 w-full h-16 fixed top-4 flex justify-between items-center">
+        {% if user.is_authenticated %}
+        <img id="menu" src="{% static 'user/images/menu.svg'%}" alt="menu" class="w-10 h-10 cursor-pointer">
+        <div class="text-center flex flex-col justify-center items-center">
+            <h5 class="font-serif text-sm text-amber-900">Wase</h5>
+            <h6 class="font-serif text-sm text-amber-900">Dorm Delivery</h6>
+        </div>
+        {% if user.profile_picture %}
+        {% if user.username == 'natnael'  %}
+        <div class="flex gap-4 justify-between ">
+           <a href="{% url 'order:order_list'%}"><img src="{% static 'user/images/msnot.svg' %}" class="h-10 w-10" alt=""></a>
+        <a href="{% url 'order:order_cheke_list'%}"><img src="{% static 'user/images/ms.svg' %}" class="h-10 w-10" alt=""></a>
+        </div>
+       {% else %}
+        <a href="{% url 'user_profile' %}" style="border: 2px solid #ef8354;" class="rounded-full">
+        <div style="background-image: url('{{ user.profile_picture.url }}')" class="w-14 h-14 bg-top bg-cover rounded-full"></div></a>
+        {% endif %}
+
+        <div id="slide" class="slide bg-slate-400 shadow-lg absolute z-50 w-screen h-0 px-6 top-16 left-0">
+            <div id="display" class="display hidden w-full h-full flex-col justify-center items-center rounded-lg">
+                <div class="w-full flex py-5">
+                    <div style="background-image: url('{{ user.profile_picture.url }}')" alt="" class="relative w-16 h-16 rounded-full bg-top bg-cover"></div>
+                    <div class="text-white text-xl ml-2">
+                        <h1 class="capitalize">{{ user.username }}</h1>
+                        <h1 class="capitalize text-sm">{{ user.email }}</h1>
+                    </div>
+                </div>
+                <form class="" action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="bg-red-500 px-10 py-3 mt-5 rounded-lg text-white" type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+        
+        {% else %}
+            <a href="{% url 'user_profile' %}">
+                <div class="w-14 h-14 bg-gray-300 rounded-full flex justify-center items-center">
+                    <span class="text-gray-600 text-2xl">+</span>
+                </div>
+            </a>
+        {% endif %}
+     {% else %}
+     <img id="menu" src="{% static 'user/images/menu.svg'%}" alt="menu" class="w-12 h-12 cursor-pointer">
+     <div class="text-center flex flex-col justify-center items-center b">
+         <h5 class="font-serif text-sm text-amber-900">Wase</h5>
+         <h6 class="font-serif text-sm text-amber-900">Dorm Delivery</h6>
+     </div>
+     <a href="{% url 'user_profile' %}"><div style="background-image: url({% static 'user/images/profile.png' %})" class="w-12 h-12 bg-center bg-cover rounded-full"></div></a>
+     <div id="slide" class="slide bg-red-500 absolute z-50 w-screen h-0 px-6 top-16 left-0   ">
+         <div id="display" class=" display hidden  w-full h-full flex-col justify-center  items-center rounded-lg">
+             <div class="w-full flex py-5 px-5">
+             </div>
+
+             <a href="{% url 'logout' %}" class="px-16 mx-auto bg-green-600 py-4 rounded-lg text-white">Login</a>
+         </div>
+     </div>
+     {% endif %}
+ </nav>
+
+ 
+ {% block content %}
+ {% endblock %}
+ 
+
+<div class="flex justify-center items-center">
+
+
+
+     <div style="box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); background-color: #edf2f4; " class="bottom-nav   py-5 max-w-xl">
+         <a href="{% url 'Menu:menu_item_list' %}">
+         <div class="nav-item ">
+             <img src="{% static 'user/images/cutlery-cross-couple-of-fork-and-spoon-svgrepo-com.svg' %}" alt="Home">
+             <p>Home</p>
+         </div></a>
+         <a href="{% url 'order:view_cart' %}">
+         <div class="nav-item relative">
+            <div style="background: #2d3142;" class="absolute h-fit w-fit px-2 py-1 rounded-full  -top-2  left-5">
+                <h6 id="cart-length" style="font-size: 10px; font-weight: bolder; color: #ffffff;" class="text-white ">{{ cart_length }}</h6>
+            </div>
+             <img src="{% static 'user/images/shopping-cart-car-buy-purchase-svgrepo-com.svg'%}" alt="Cart">
+             <p>Cart</p>
+         </div></a>
+         <a href="{% url 'order:order_history' %} ">
+             <div class="nav-item">
+                 <img src="{% static 'user/images/receipt-svgrepo-com.svg'%}" alt="Order">
+                 <p>Order</p>
+             </div></a>
+        <a href="{% url 'user_profile' %}"> <div class="nav-item">
+             <img src="{% static 'user/images/profile-1335-svgrepo-com.svg'%}" alt="Profile">
+             <p>Profile</p>
+         </div>
+     </a>
+     </div>
+    </div>
+ 
+
+<script>
+    // JavaScript
+    document.getElementById('add-to-cart-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        fetch(this.action, {
+            method: this.method,
+            body: new FormData(this),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // Add this header to identify AJAX requests in Django views
+            }
+        }).then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to add item to cart');
+            }
+        }).then(function(data) {
+            document.getElementById('cart-length').textContent = data.cart_length; // Update cart length value
+        }).catch(function(error) {
+            console.error('Error:', error);
+        });
+    });
+document.getElementById('horizontalList').scrollLeft = document.querySelector('.list-item').offsetLeft;
+
+
+// Function to toggle classes for the "slide" and "display" elements
+    function toggleClasses() {
+        // Find the element with ID "slide"
+        const slideElement = document.getElementById("slide");
+
+        // Find the element with ID "display"
+        const displayElement = document.getElementById("display");
+
+        // Toggle the classes for the "slide" element
+        slideElement.classList.toggle("h-0");
+        slideElement.classList.toggle("h-52");
+
+        // Toggle the classes for the "display" element after a delay
+        setTimeout(() => {
+            displayElement.classList.toggle("hidden");
+            displayElement.classList.toggle("flex");
+        }, 500); // Adjust the delay to match the transition duration
+    }
+
+    // Add a click event listener to the element with ID "menu"
+    document.getElementById("menu").addEventListener("click", toggleClasses);
+// Select the element by ID
+let preElement = document.getElementById("pre");
+
+// Function to fade out the element and remove it from the DOM after a delay
+function fadeOutAndRemove() {
+preElement.style.transition = "opacity 1s ease-out"; // You can adjust the duration and timing function
+preElement.style.opacity = 0;
+
+// Set a timeout to remove the element from the DOM after the fade-out animation
+setTimeout(function () {
+    preElement.parentNode.removeChild(preElement);
+}, 1000); // Adjust the delay to match the transition duration
+}
+
+// Set a timeout to execute the function after 4 seconds (4000 milliseconds)
+setTimeout(fadeOutAndRemove, 1000);
+
+ </script>
+
+ </body>
+</html>

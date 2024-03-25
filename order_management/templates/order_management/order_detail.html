@@ -1,0 +1,33 @@
+<!-- order_management/templates/order_management/order_detail.html -->
+
+{% extends 'user/base.html' %}
+
+{% block content %}
+  <h2>Order Detail</h2>
+  
+  <p>User: {{ order.user.username }}</p>
+  <p>Total Price: ${{ order.total_price }}</p>
+  <p>Order Date: {{ order.created_at }}</p>
+
+  <h3>Ordered Items</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order_item in order_items %}
+        <tr>
+          <td>{{ order_item.item.name }}</td>
+          <td>{{ order_item.quantity }}</td>
+          <td>${{ order_item.total_price }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{% url 'order_management:order_list' %}">Back to Order List</a>
+{% endblock %}

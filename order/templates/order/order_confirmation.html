@@ -1,0 +1,25 @@
+<!-- order/templates/order/order_confirmation.html -->
+
+{% extends 'user/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="w-screen h-96 mt-32 gap-2   flex flex-col justify-center items-center">
+  <img src="{% static 'user/images/pngwing.com(5).png'%}" class="w-24 h-24" alt="">
+  <h2 class="text-xl  ">Order Confirmation!</h2>
+  <p class="text-center px-8 ">Thank you for your order! Here are the details</p>
+  <p class=""><strong>Total Price:</strong> {{ order.total_price }} <span> ETB</span></p>
+  <p class=""><strong>Dilive Dorm: </strong> {{ order.dorm_number }} <span></span></p>
+  <p class=""><strong>Payment Method:</strong> {{ order.get_payment_method_display }} </p>
+  <p class=""><strong>Transaction No: </strong> {{ order.transaction_no }} </p>
+  <p><strong>Suggestions/Comments:</strong> {{ order.suggestion_box }}</p>
+  <h3 class="" >Order Items</h3>
+  <ol class="list-decimal">
+    {% for order_item in order_items %}
+    <li>{{ order_item.item.name }} </li>
+    {% endfor %}
+    </ol>
+    <p class="text-center px-8">Your order will be processed shortly. Thank you for choosing our service!</p>
+  
+</div>
+{% endblock %}

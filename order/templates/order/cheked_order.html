@@ -1,0 +1,39 @@
+<!-- order/templates/order/order_list.html -->
+
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="order-history-container w-full px-10   " id="orderHistoryContainer">
+  <h1 class="text-4xl font-semibold mb-3 mx-auto font-serif mt-2 w-screen text-center playfair-display">Checked Order Lists </h1>
+    {% if orders %}
+    {% for order in orders %}
+  <div class="order-item">
+      <div class="order-item-info">
+          <div class="order-item-description  "><span>Order ID: </span>{{ order.id }}</div>
+          <div class="order-item-description  "><span>User: </span> {{ order.user.username }}</div>
+          <div class="order-item-description  "><span>Tel: </span> {{ order.user.phone_number }}</div>
+          <div class="order-item-description  "><span>Dorm: </span> {{ order.dorm_number }}</div>
+          <div class="order-item-description  "><span>payment option: </span> {{ order.payment_method }}</div>
+          <div class="order-item-description  "><span>Trasaction No: </span> {{ order.transaction_no }}</div>
+          <div class="order-item-description font-light"><span class="font-bold">comment: </span> <div >{{ order.suggestion_box }}</div></div>
+          <p><span class="text-xs">{{ order.created_at|date:"F j, Y" }}        </span></p>
+          <div class="order-item-price">{{ order.total_price }} <span> ETB</span></div>
+      </div>
+      <div class="flex flex-col justify-center items-center gap-5">
+        <a href="{% url 'order:order_details' order.id %}" class="px-4 capitalize rounded-lg py-2 bg-green-400">View Details</a>
+      <form action="{% url 'order:mark_delivered' order.id %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="bg-green-400 hover:bg-green-700 text-black font-bold py-2 px-4 rounded">Mark Delivered</button>
+      </form>
+      </div>
+      
+  </div>
+  
+  {% endfor %}
+  {% else %}
+  <p class="text-xl font-semibold ">No order Yet!</p>
+  {% endif %}
+  <!-- Add more order items as needed -->
+</div>
+{% endblock %}

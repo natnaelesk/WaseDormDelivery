@@ -1,0 +1,21 @@
+<!-- order/templates/order/view_order.html -->
+
+{% extends 'user/base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Order Details</h2>
+
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>Total Price:</strong> ${{ order.total_price }}</p>
+
+    <h3>Order Items:</h3>
+    <ul>
+      {% for order_item in order_items %}
+        <li>{{ order_item.item.name }} - Quantity: {{ order_item.quantity }} - Total Price: ${{ order_item.total_price }}</li>
+      {% endfor %}
+    </ul>
+
+    <p>Your order has been successfully placed. Thank you for choosing our service!</p>
+  </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="w-full h-1/2 bg-white overflow-x-hidden overflow-y-auto mt-24 rounded-lg flex flex-col gap-4 px-6 p-2">
+    {% if order %}
+    <h1 class="text-2xl font-serif mt-2 w-screen text-center">Order Details</h1>
+    {% for order_item in order_items %}
+    <div class="w-full rounded-lg items-center flex bg-slate-200 shadow-md border-2">
+        {% if order_item.item.item_picture %}
+        <div style="background-image: url('{{ order_item.item.item_picture.url }}');" class="w-24 h-20 bg-center bg-cover rounded-md"></div>
+        {% else %}
+        <!-- Display default image or placeholder image if item_picture is missing -->
+        <div style="background-image: url({% static 'user/images/artem-beliaikin-jlWoIsNTKjA-unsplash.jpg'%});" class="w-24 h-20 bg-center bg-cover rounded-md"> </div>
+        {% endif %}
+        <div class="flex flex-col ml-3 text-sm gap-1">
+            <h2 class="capitalize">{{ order_item.item.name }}</h2>
+            <p>{{ order_item.item.description }}</p>
+            <p>{{ order_item.item.price }} <span>ETB</span> * <span class="text-red-400 font-bold">{{ order_item.quantity }}</span></p>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="flex flex-col h-1/4 mt-5 w-full justify-start items-start gap-5 px-6">
+        <div class="flex justify-between w-full">
+            <h1 class="font-sans">
+                SubTotal
+            </h1>
+            <span>
+                {{ order.total_price }} ETB
+            </span>
+        </div>
+        <div class="flex justify-between w-full">
+            <h1 class="font-sans">
+                Date
+            </h1>
+            <span>
+                {{ order.created_at|date:"F j, Y" }}
+            </span>
+        </div>
+    </div>
+    {% else %}
+    <p>Your order is empty.</p>
+    {% endif %}
+    <!-- Add more order items as needed -->
+</div>
+{% endblock %}

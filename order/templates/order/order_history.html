@@ -1,0 +1,36 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block content %}
+<div class="order-history-container w-full px-10   " id="orderHistoryContainer">
+    {% if orders %}
+    {% for order in orders %}
+  <div class="order-item">
+    {% if order.order_delivered%}
+    <img src="{% static 'user/images/pngwing.com(5).png'%}" alt="Order success">
+    
+      <div class="order-item-info">
+          <div class="order-item-description">successfully</div>
+          <p><span class="text-xs">{{ order.created_at|date:"F j, Y" }}        </span></p>
+          <div class="order-item-price">{{ order.total_price }} <span> ETB</span></div>
+      </div>
+
+      {% else %}
+    <img src="{% static 'user/images/wait.svg'%}" alt="Order success">
+    <div class="order-item-info">
+        <div class="order-item-description">wait for Delivey</div>
+        <p><span class="text-xs">{{ order.created_at|date:"F j, Y" }}        </span></p>
+        <div class="order-item-price">{{ order.total_price }} <span> ETB</span></div>
+    </div>
+
+    {% endif %}
+      <a href="{% url 'order:order_details' order.id %}" style="background: #ef8354; color: #fff;" class="px-4 capitalize text-sm rounded-lg py-2 bg-green-400">view items</a>
+  </div>
+  
+  {% endfor %}
+  {% else %}
+  <p class="text-xl font-semibold ">No order History</p>
+  {% endif %}
+  <!-- Add more order items as needed -->
+</div>
+
+{% endblock %}

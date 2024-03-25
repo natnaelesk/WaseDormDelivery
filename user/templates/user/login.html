@@ -1,0 +1,36 @@
+<!-- login.html -->
+
+{% extends 'user/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+<section  class=" z-50 absolute  top-0 preload w-screen text-white h-screen flex flex-col justify-center items-center " >
+  <div class="w-72 px-6 flex flex-col justify-start items-center  rounded-lg bg-white absolute  ">
+   <div class=" flex justify-evenly items-center w-full  h-20">
+       <div class="w-24 h-10  rounded-full flex justify-center items-center text-black  shadow-sm bg-orange-400 ">Loging</div>
+       <a href="{% url 'signup' %}"><div class="w-24 h-10  rounded-full flex justify-center items-center text-black border-stone-600 border shadow-sm bg-white "> Signup</div>
+       </a></div>
+       {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <div class="{{ message.tags }} text-red-400 font-bold text-sm">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+   <div>
+
+       <label for="username" class="text-black">Username</label>
+       <input type="text" name="username" id="id_username" class="bg-slate-100 w-full h-10 text-black px-3 border-stone-600 border-b rounded-t-lg">
+   </div>
+   <div class="mt-2 ">
+       <label for="username" class="text-black">Password</label>
+       <input type="password" name="password" id="id_password" class="bg-slate-100 text-black px-3 w-full h-10 border-stone-600 border-b rounded-t-lg">
+   </div>
+   <button type="submit" class="text-black mt-10 mb-4 px-10 py-2 bg-green-400 rounded-lg ">Login</button>
+   </div>
+</section>
+</form>
+{% endblock %}
