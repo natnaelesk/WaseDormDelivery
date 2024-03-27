@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+
+
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,13 +27,12 @@ SECRET_KEY = 'django-insecure-s!k2^)q69(6hl2h-v=p003lfnzzo38i(!a!jb$k#uxgv9)k4*$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.245.246','127.0.0.1']
+ALLOWED_HOSTS = ['natnaelEsk.pythonanywhere.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'sslserver',
     'order_management',
     'Menu',
     'order',
@@ -42,8 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'tailwind',
 ]
 
 MIDDLEWARE = [
@@ -137,7 +136,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'user.User' 
+AUTH_USER_MODEL = 'user.User'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -145,7 +144,6 @@ MEDIA_URL = '/media/'  # Change this if your media URL is different
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Change this if your media folder is located elsewhere
 
 LOGIN_URL = 'login'
-SECURE_SSL_REDIRECT = True
 
 
 X_FRAME_OPTIONS = 'DENY'
@@ -157,3 +155,7 @@ CSP_HEADER = {
 }
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'user', 'static'),
+    # Add paths to other app static directories if necessary
+]

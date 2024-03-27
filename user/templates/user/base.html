@@ -14,11 +14,12 @@
     <title>{% block title %}My Website{% endblock %}</title>
     <link  href="{% static 'user/output.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{% static 'user/style.css' %}">
+
     {% block head %}{% endblock %}
 </head>
 <body style="background-color: #edf2f4;" class=" overflow-x-hidden ">
     <!-- <section id="pre" class=" z-50 absolute top-0 preload w-screen text-white h-screen flex flex-col justify-center items-center " >
-         <h1 class="font-serif text-7xl">Wase </h1> 
+         <h1 class="font-serif text-7xl">Wase </h1>
          <h2 class="font-thin font-mono text-2xl">Dorm Delivery</h2>
          <div class="loader"><span></span><span></span><span></span></div>
     </section> -->
@@ -55,7 +56,7 @@
                 </form>
             </div>
         </div>
-        
+
         {% else %}
             <a href="{% url 'user_profile' %}">
                 <div class="w-14 h-14 bg-gray-300 rounded-full flex justify-center items-center">
@@ -81,10 +82,10 @@
      {% endif %}
  </nav>
 
- 
+
  {% block content %}
  {% endblock %}
- 
+
 
 <div class="flex justify-center items-center">
 
@@ -116,7 +117,7 @@
      </a>
      </div>
     </div>
- 
+
 
 <script>
     // JavaScript
